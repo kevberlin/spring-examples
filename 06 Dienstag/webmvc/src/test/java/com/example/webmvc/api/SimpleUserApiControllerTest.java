@@ -57,18 +57,17 @@ public class SimpleUserApiControllerTest {
         mockMvc.perform(get("/api"))
                 .andExpect(status().isOk())
                 .andExpect(content()
-                        .contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$[0].username")
+                        .contentType("application/hal+json;charset=UTF-8"))
+                .andExpect(jsonPath("$._embedded.newsUserResourceList[0].username")
                         .value(testUser.getUsername()))
-                .andExpect(jsonPath("$[0].firstname")
+                .andExpect(jsonPath("$._embedded.newsUserResourceList[0].firstname")
                         .value(testUser.getFirstname()))
-                .andExpect(jsonPath("$[0].lastname")
+                .andExpect(jsonPath("$._embedded.newsUserResourceList[0].lastname")
                         .value(testUser.getLastname()))
-                .andExpect(jsonPath("$[0].password")
-                        .doesNotExist())
-                .andExpect(jsonPath("$[0].birthday")
-                        .value(testUser.getBirthday().toString()));
-
+                .andExpect(jsonPath("$._embedded.newsUserResourceList[0].birthday")
+                        .value(testUser.getBirthday().toString()))
+                .andExpect(jsonPath("$._embedded.newsUserResourceList[0]._links.self.href")
+                        .value("http://localhost/api/" + testUser.getUsername()));
         verify(userRepository, times(1)).findAll();
     }
 
@@ -77,7 +76,7 @@ public class SimpleUserApiControllerTest {
         mockMvc.perform(get("/api/testuser"))
                 .andExpect(status().isOk())
                 .andExpect(content()
-                        .contentType("application/json;charset=UTF-8"))
+                        .contentType("application/hal+json;charset=UTF-8"))
                 .andExpect(jsonPath("$.username")
                         .value(testUser.getUsername()))
                 .andExpect(jsonPath("$.firstname")

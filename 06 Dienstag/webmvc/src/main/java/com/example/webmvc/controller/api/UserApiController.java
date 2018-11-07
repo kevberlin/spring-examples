@@ -1,15 +1,14 @@
 package com.example.webmvc.controller.api;
 
 import com.example.webmvc.model.NewsUser;
-import com.example.webmvc.model.PartialUser;
 import com.example.webmvc.repositories.NewsUserRepository;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.fromMethodCall;
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
@@ -27,19 +26,19 @@ public class UserApiController {
     }
 
     @GetMapping
-    public List<PartialUser> findAll() {
-        return userRepository.findAll()
-                .stream()
-                .map(PartialUser::new)
-                .collect(Collectors.toList());
+    public Resources<NewsUserResource> findAll() {
+        List<NewsUser> users = userRepository.findAll();
+        List<NewsUserResource> resources = new
+                NewsUserResourceAssembler().toResources(users);
+        return new Resources<>(resources);
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<PartialUser> findByUsername(@PathVariable("username") String username) {
-        ResponseEntity<PartialUser> response;
+    public ResponseEntity<NewsUserResource> findByUsername(@PathVariable("username") String username) {
+        ResponseEntity<NewsUserResource> response;
         try {
             response = ResponseEntity.ok(
-                    new PartialUser(userRepository.findByUsername(username)));
+                    new NewsUserResourceAssembler().toResource(userRepository.findByUsername(username)));
         } catch (Exception e) {
             response = ResponseEntity.notFound().build();
         }
@@ -47,13 +46,13 @@ public class UserApiController {
     }
 
     @PostMapping
-    public ResponseEntity<NewsUser> save(@RequestBody NewsUser user) {
+    public ResponseEntity<?> save(@RequestBody NewsUser user) {
         String pass = passwordEncoder.encode(user.getPassword());
         user.setPassword(pass);
-        user = userRepository.save(user);
+        NewsUser savedUser = userRepository.save(user);
         UriComponents uri =
                 fromMethodCall(on(UserApiController.class)
-                        .findByUsername(user.getUsername())).build();
+                        .findByUsername(savedUser.getUsername())).build();
         return ResponseEntity.created(uri.toUri()).build();
     }
 }
