@@ -25,6 +25,14 @@ public class NewsUser {
         this.password = password;
     }
 
+    public NewsUser(Long id, String firstname, String lastname, LocalDate birthday, String username) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.birthday = birthday;
+        this.username = username;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_order_seq")
     @SequenceGenerator(name = "gen_order_seq",
