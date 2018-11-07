@@ -2,7 +2,7 @@ package com.example.webmvc.integration;
 
 import com.example.webmvc.controller.NewsUserController;
 import com.example.webmvc.model.NewsUser;
-import com.example.webmvc.service.NewsUserRepository;
+import com.example.webmvc.repositories.NewsUserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

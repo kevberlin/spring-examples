@@ -1,6 +1,7 @@
 package com.example.webmvc.service;
 
 import com.example.webmvc.model.NewsUser;
+import com.example.webmvc.repositories.NewsUserRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

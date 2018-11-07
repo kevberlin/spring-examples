@@ -1,7 +1,7 @@
 package com.example.webmvc.controller;
 
 import com.example.webmvc.model.NewsUser;
-import com.example.webmvc.service.NewsUserRepository;
+import com.example.webmvc.repositories.NewsUserRepository;
 import com.example.webmvc.service.UnknownNewsUserException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

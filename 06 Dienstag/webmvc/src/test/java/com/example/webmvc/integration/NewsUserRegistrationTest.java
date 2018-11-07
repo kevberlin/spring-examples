@@ -2,7 +2,7 @@ package com.example.webmvc.integration;
 
 import com.example.webmvc.controller.NewsUserController;
 import com.example.webmvc.model.NewsUser;
-import com.example.webmvc.service.NewsUserRepository;
+import com.example.webmvc.repositories.NewsUserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -21,7 +21,6 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

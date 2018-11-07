@@ -1,23 +1,27 @@
 package com.example.webmvc.selenium;
 
 import com.example.webmvc.model.NewsUser;
-import com.example.webmvc.service.NewsUserRepository;
+import com.example.webmvc.repositories.NewsUserRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
+import static junit.framework.TestCase.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -30,8 +34,8 @@ public class RegistrationIntegrationTest {
     private int port;
     private WebDriver driver;
 
-    @SpyBean
-    private NewsUserRepository userRepository;
+    @Autowired
+    private NewsUserRepository newsUserRepository;
 
     @Before
     public void setup() {
@@ -62,8 +66,18 @@ public class RegistrationIntegrationTest {
         driver.findElement(By.tagName("button")).click();
         NewsUser expected = new NewsUser("test","test",
                 LocalDate.of(1970,1,1),"test","test");
-        verify(userRepository, times(1))
-                .save(expected);
+
+        // capture
+        ArgumentCaptor<NewsUser> argument =
+                ArgumentCaptor.forClass(NewsUser.class);
+        verify(newsUserRepository, times(1))
+                .save(argument.capture());
+        NewsUser savedUser = argument.getValue();
+
+        // assert
+        assertThat(savedUser).isEqualToIgnoringGivenFields(savedUser, "password");
+        assertTrue(new BCryptPasswordEncoder()
+                .matches("test", savedUser.getPassword()));
     }
 
     @After
