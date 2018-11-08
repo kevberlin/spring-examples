@@ -6,6 +6,9 @@ import org.springframework.integration.annotation.Router;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.annotation.Splitter;
 import org.springframework.integration.channel.DirectChannel;
+import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.dsl.IntegrationFlows;
+import org.springframework.integration.dsl.MessageChannels;
 import org.springframework.integration.router.AbstractMessageRouter;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -78,5 +81,14 @@ public class RouterConfiguration {
         return Stream.of(strings)
                 .map(s -> Integer.valueOf(s))
                 .collect(Collectors.toList());
+    }
+
+    @Bean
+    public IntegrationFlow uppercaseFlow() {
+        return IntegrationFlows
+                .from(MessageChannels.direct("inChannel"))
+                .<String, String>transform(t -> t.toUpperCase())
+                .channel("outChannel")
+                .get();
     }
 }
