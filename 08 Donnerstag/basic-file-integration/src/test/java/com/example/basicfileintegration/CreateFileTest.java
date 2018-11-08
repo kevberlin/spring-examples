@@ -9,6 +9,8 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static junit.framework.TestCase.assertTrue;
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class CreateFileTest {
@@ -18,7 +20,8 @@ public class CreateFileTest {
     private MessageChannel textChannel;
 
     @Test
-    public void test() {
-        textChannel.send(new GenericMessage<>("String"));
+    public void sendTextAndExpectFileCreation() {
+        boolean send = textChannel.send(new GenericMessage<>("String"));
+        assertTrue(send);
     }
 }
