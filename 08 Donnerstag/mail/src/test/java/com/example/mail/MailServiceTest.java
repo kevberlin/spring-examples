@@ -49,6 +49,6 @@ public class MailServiceTest {
         assertThat(mimeMessage.getContent().toString().trim())
                 .isEqualTo("Text");
         assertThat(mimeMessage.getSubject()).isEqualTo("Subject");
-        
+
     }
 }
