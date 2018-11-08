@@ -1,0 +1,23 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   objectQuotingStrategy="QUOTE_ALL_OBJECTS"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="k" id="create-order-table">
+        <createTable tableName="ORDERS">
+            <column name="ID" type="BIGINT" autoIncrement="true" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ORDER_NUMBER" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NOTES" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="k" id="create-order-table-pkey">
+        <addPrimaryKey columnNames="ID" constraintName="ORDERS_PKEY" tableName="ORDERS"/>
+    </changeSet>
+</databaseChangeLog>
